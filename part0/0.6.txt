@@ -1,0 +1,21 @@
+title Create Note - SPA
+
+user->browser:
+note right of user:
+user enters note and clicks "Save"
+end note
+
+note over browser:
+browser executes js-code to create a new note object
+and adds it to the existing array of notes. the input 
+field is cleared and the notes are redrawn/re-rendered.
+The note is then sent to the server for processing.
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note left of server:
+add note to array of notes
+end note
+
+server-->browser: Status 201 {"message":"note created"}
