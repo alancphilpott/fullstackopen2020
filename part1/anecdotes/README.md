@@ -20,10 +20,10 @@ The _selected_ state variable determines which Anecdote from the array of Anecdo
 The _points_ state variable is a dynamically initialized array with length based on the number of Anecdotes. When a user votes for an Anecdote, the aforementioned _selected_ variable determines which index to update. E.G. _selected_ = 0 will refernece the first Anecdote and if voted for will update the 0th index of the _points_ array.
 
     selected = 0
-    Text: anecdotes[0] => Votes: points[0]
+    Text: anecdotes[selected] => Votes: points[selected]
 
     selected = 1
-    Text: anecdotes[1] => Votes: points[1]
+    Text: anecdotes[selected] => Votes: points[selected]
 
 Finally, the Anecdote with the most votes is determined by a function call which returns the index of the Anecdote most voted for.
 
