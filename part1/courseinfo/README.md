@@ -2,6 +2,8 @@
 
 Exercise info can be found [here](https://fullstackopen.com/en/part1/java_script#exercises-1-3-1-5)
 
+![courseinfo Screenshot](https://i.imgur.com/gq7d6AC.png)
+
 A SPA displaying some course content and the number of exercises in each content part.
 
 Comprised of 4 components other than the root App component:
