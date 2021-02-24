@@ -1,8 +1,8 @@
 # fullstackopen2020 courseinfo (revisited)
 
-Exercise info can be found (here)[https://fullstackopen.com/en/part2/rendering_a_collection_modules#exercises-2-1-2-5]. These exercises are a follow up to the application found (here)[https://github.com/alancphilpott/fullstackopen2020/tree/master/part1/courseinfo].
+Exercise info can be found [here](https://fullstackopen.com/en/part2/rendering_a_collection_modules#exercises-2-1-2-5). These exercises are a follow up to the application found [here](https://github.com/alancphilpott/fullstackopen2020/tree/master/part1/courseinfo).
 
-!(courseinfo-revisited screenshot)[https://i.imgur.com/REZuW90.png]
+![courseinfo-revisited screenshot](https://i.imgur.com/REZuW90.png)
 
 ## Refactoring Information
 
