@@ -1,23 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Contacts from './components/Contacts'
 import Filter from './components/Filter'
 import ContactForm from './components/ContactForm'
+import axios from 'axios'
 
 function App() {
-  const [contacts, setContacts] = useState([
-    { name: 'Alan Philpott', number: '(429) 304-2158' },
-    { name: 'Arto Hellas', number: '(499) 926-9005' },
-    { name: 'Ada Lovelace', number: '(229) 797-0796' },
-    { name: 'Dan Abramov', number: '(397) 845-7465' },
-    { name: 'Mary Poppendieck', number: '(728) 360-4209' }
-  ])
+  const [contacts, setContacts] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
 
-  const checkAlreadyExists = (person) =>
+  const getContactsEffectHook = () => {
+    axios
+      .get('http://localhost:3001/contacts')
+      .then((res) => setContacts(res.data))
+      .catch((err) => console.log('Error Fetching Data'))
+  }
+
+  useEffect(getContactsEffectHook, [])
+
+  const checkAlreadyExists = (contact) =>
     contacts.some(
-      (p) => p.name.toLowerCase() === person.name.toLowerCase() || p.number === person.number
+      (p) => p.name.toLowerCase() === contact.name.toLowerCase() || p.number === contact.number
     )
 
   const handleNameInput = (e) => setNewName(e.target.value)
@@ -26,18 +30,19 @@ function App() {
 
   const handleSearchInput = (e) => setSearch(e.target.value)
 
-  const handleNewContact = (e) => {
+  const handlenewContact = (e) => {
     e.preventDefault()
 
-    const newPerson = {
+    const newContact = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: contacts.length + 1
     }
 
-    if (checkAlreadyExists(newPerson))
+    if (checkAlreadyExists(newContact))
       alert(`${newName} or ${newNumber} Already Added To Phonebook`)
     else {
-      setContacts(contacts.concat(newPerson))
+      setContacts(contacts.concat(newContact))
       setNewName('')
       setNewNumber('')
     }
@@ -57,7 +62,7 @@ function App() {
       <ContactForm
         name={newName}
         number={newNumber}
-        handleForm={handleNewContact}
+        handleForm={handlenewContact}
         handleNameInput={handleNameInput}
         handleNumberInput={handleNumberInput}
       />

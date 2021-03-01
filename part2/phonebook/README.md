@@ -10,7 +10,14 @@ A SPA used to create, display and filter through contacts.
 
 The root _App_ component manages the entire application state - of which there are 4 pieces of state:
 
-- _contacts_: an array containing contact objects with 2 properties, _name_ and _number_. initialized with some dummy data.
+- _contacts_: an array containing contact objects with 3 properties, _name_, _number_ & _id_. Initial contacts are fetched from _json-server_ using _axios_ during initial render through a _useEffect_ hook.
+
+  () => {
+    axios
+        .get('http://localhost:3001/contacts')
+        .then((res) => setContacts(res.data))
+        .catch((err) => console.log('Error Fetching Data'))
+  }
 
 - _newName_: used to control the form input element for the new name.
 
@@ -65,3 +72,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
+
+### `npm run server`
+
+Runs the json-server to mimic a REST API - this will monitor changes within the file _db.json_ in the root of the project.
+Open [http://localhost:3001/contacts](http://localhost:3001/contacts) to view in the browser.
