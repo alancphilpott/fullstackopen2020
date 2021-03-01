@@ -12,13 +12,6 @@ The root _App_ component manages the entire application state - of which there a
 
 - _contacts_: an array containing contact objects with 3 properties, _name_, _number_ & _id_. Initial contacts are fetched from _json-server_ using _axios_ during initial render through a _useEffect_ hook.
 
-    () => {
-    axios
-        .get('http://localhost:3001/contacts')
-        .then((res) => setContacts(res.data))
-        .catch((err) => console.log('Error Fetching Data'))
-    }
-
 - _newName_: used to control the form input element for the new name.
 
 - _newNumber_: used to control the form input element for new number.
