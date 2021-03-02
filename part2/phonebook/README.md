@@ -2,15 +2,15 @@
 
 The exercise for this project can be found [here](https://fullstackopen.com/en/part2/forms#exercises-2-6-2-10)
 
-![Phonebook Screenshot](https://i.imgur.com/sY5U9JM.png)
+![Phonebook Screenshot](https://i.imgur.com/92cIWh7.gif)
 
-A SPA used to create, display and filter through contacts.
+A SPA used to create, update, delete, display and filter through contacts.
 
 ## Implementation
 
 The root _App_ component manages the entire application state - of which there are 4 pieces of state:
 
-- _contacts_: an array containing contact objects with 3 properties, _name_, _number_ & _id_. Initial contacts are fetched from _json-server_ using _axios_ during initial render through a _useEffect_ hook.
+- _contacts_: an array containing contact objects with 3 properties, _name_, _number_ & _id_. Initial contacts are fetched from _json-server_ using the imported _contactService getAll_ method during initial render through a _useEffect_ hook.
 
 - _newName_: used to control the form input element for the new name.
 
@@ -18,22 +18,42 @@ The root _App_ component manages the entire application state - of which there a
 
 - _search_: controls the form input element for a search query.
 
-The form event handler _handleNewContact_ will initialize a new contact object and check if the _name_ property (case insensitive) or _number_ property already exists in the phonebook using the Array _some_ method. An alert is displayed in this case - otherwise the _contacts_ state is updated and the _newName_ and _newNumber_ states reset.
+The form event handler _handleNewContact_ will initialize a new contact object and check if the _name_ property (case insensitive) already exists in the phonebook using the Array _filter_ method. If a contact already exists, an alert is shown giving the user an option to update the contacts number, upon confirmation the _contactService update_ method is called. Alternatively, the _contacts_ state is updated and the _newName_ and _newNumber_ states reset. (This is by far the most complex and convoluted part of the code)
 
     const handleNewContact = (e) => {
         e.preventDefault()
 
-        const newPerson = {
+        const newContact = {
             name: newName,
             number: newNumber
         }
 
-        if (checkAlreadyExists(newPerson))
-            alert(`${newName} or ${newNumber} Already Added To Phonebook`)
-        else {
-            setContacts(contacts.concat(newPerson))
-            setNewName('')
-            setNewNumber('')
+        const existing = checkAlreadyExists(newContact)
+        if (existing.length !== 0) {
+            const existingContact = existing[0]
+
+            const shouldUpdate = window.confirm(
+            `${existingContact.name} Already Exists - Update Their Phone Number?`
+            )
+
+            const updatedContact = { ...existingContact, number: newContact.number }
+
+            if (shouldUpdate) {
+                contactService.update(existingContact.id, updatedContact).then((contact) => {
+                    setContacts(contacts.map((c) => (c.id !== updatedContact.id ? c : contact)))
+                })
+                setNewName('')
+                setNewNumber('')
+            }
+        } else {
+            contactService
+                .create(newContact)
+                .then((contact) => {
+                setContacts(contacts.concat(contact))
+                setNewName('')
+                setNewNumber('')
+                })
+                .catch((err) => console.log(`Error Occured: ${err}`))
         }
     }
 
@@ -44,11 +64,11 @@ Finally before rendering, a conditional operator is ran to assess the current _s
         ? contacts
         : contacts.filter((p) => p.name.toLocaleLowerCase().includes(search.toLowerCase()))
 
-![Filtering Contacts Screenshot](https://i.imgur.com/RTs3Mxg.png)
+When rendering contacts, each _Contact_ component is passed a _handleDeleteContact_ function to give as an event handler for its delete button - the event handler is unique to each contact respective of its _id_ value. _handleDeleteContact_ first runs the _window.confirm_ method informing the user of its actions, upon confirmation will utilize the _contactService deleteOne_ method to remove the contact from the server.
 
 ## Component Tree
 
-![Phonebook Component Tree](https://i.imgur.com/Wedozru.png)
+![Phonebook Component Tree](https://i.imgur.com/49BfVTT.png)
 
 ## Other Info
 

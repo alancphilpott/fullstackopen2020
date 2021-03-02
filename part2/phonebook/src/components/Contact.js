@@ -5,7 +5,9 @@ const Contact = ({ cInfo, handleDelete }) => (
     <span>
       {cInfo.name} : {cInfo.number}
     </span>{' '}
-    <button onClick={() => handleDelete(cInfo.id)}>Delete</button>
+    <button className={'deleteBtn'} onClick={() => handleDelete(cInfo.id)}>
+      Delete
+    </button>
   </p>
 )
 

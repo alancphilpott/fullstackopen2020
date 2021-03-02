@@ -47,10 +47,13 @@ function App() {
 
       const updatedContact = { ...existingContact, number: newContact.number }
 
-      if (shouldUpdate)
+      if (shouldUpdate) {
         contactService.update(existingContact.id, updatedContact).then((contact) => {
           setContacts(contacts.map((c) => (c.id !== updatedContact.id ? c : contact)))
         })
+        setNewName('')
+        setNewNumber('')
+      }
     } else {
       contactService
         .create(newContact)
