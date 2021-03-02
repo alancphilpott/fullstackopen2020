@@ -1,10 +1,10 @@
 import React from 'react'
 import Contact from './Contact'
 
-const Contacts = ({ contacts }) => (
+const Contacts = ({ contacts, handleDelete }) => (
   <div className={'contacts'}>
-    {contacts.map((p) => (
-      <Contact key={p.id} person={p} />
+    {contacts.map((c) => (
+      <Contact key={c.id} cInfo={c} handleDelete={handleDelete} />
     ))}
   </div>
 )
