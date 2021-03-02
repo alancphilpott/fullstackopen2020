@@ -4,10 +4,10 @@ These exercises are optional and can be found [here](https://fullstackopen.com/e
 
 A SPA where a user enters a search term and is given a result of countr(ies) as a list.
 
-![Countries App Demonstration]()
+![Countries App Demonstration](https://i.imgur.com/t1OkRpD.gif)
 
-Country information fetched from (restcountries.eu)[https://restcountries.eu].
-Weather information fetched from (weatherstack.com)[https://weatherstack.com].
+Country information fetched from [restcountries.eu](https://restcountries.eu).
+Weather information fetched from [weatherstack.com](https://weatherstack.com).
 
 ## Implementation
 
@@ -98,7 +98,7 @@ To clone and run this project, create a _.env_ file in the root directory with t
 
     REACT_APP_API_KEY=<YOUR_ACCESS_KEY>
 
-You need to register on (weatherstack.com)[https://weatherstack.com] for an access key. You can also just skip this and the weather information will be ignored.
+You need to register on [weatherstack.com](https://weatherstack.com) for an access key. You can also just skip this and the weather information will be ignored.
 
 ## Available Scripts
 
