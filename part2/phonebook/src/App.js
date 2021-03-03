@@ -21,7 +21,7 @@ function App() {
   }, [])
 
   // Helper Functions
-  const checkAlreadyExists = (contact) =>
+  const checkExists = (contact) =>
     contacts.filter((c) => c.name.toLowerCase() === contact.name.toLowerCase())
 
   // Event and State Mngt
@@ -39,7 +39,7 @@ function App() {
       number: newNumber
     }
 
-    const existing = checkAlreadyExists(newContact)
+    const existing = checkExists(newContact)
     if (existing.length !== 0) {
       const existingContact = existing[0]
 
@@ -56,7 +56,7 @@ function App() {
 
         setShowNotification({ message: `Updated ${updatedContact.name}`, type: 'updated' })
 
-        setTimeout(() => setShowNotification({ message: null, type: null }), 5000)
+        setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
 
         setNewName('')
         setNewNumber('')
@@ -69,7 +69,7 @@ function App() {
 
           setShowNotification({ message: `Added ${contact.name}`, type: 'added' })
 
-          setTimeout(() => setShowNotification({ message: null, type: null }), 5000)
+          setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
 
           setNewName('')
           setNewNumber('')
@@ -89,11 +89,20 @@ function App() {
         .then((res) => {
           setContacts(contacts.filter((c) => c.id !== id))
 
-          setShowNotification({ message: `Deleted Contact`, type: 'deleted' })
+          setShowNotification({ message: `Deleted ${contact.name}`, type: 'deleted' })
 
-          setTimeout(() => setShowNotification({ message: null, type: null }), 5000)
+          setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
         })
-        .catch((err) => console.log(`Error Occured: ${err}`))
+        .catch((err) => {
+          setContacts(contacts.filter((c) => c.id !== id))
+
+          setShowNotification({
+            message: `Information of ${contact.name} has already been removed from server`,
+            type: 'error'
+          })
+
+          setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
+        })
     }
   }
 
@@ -105,6 +114,8 @@ function App() {
   return (
     <div className={'app-main'}>
       <h1>Phonebook 📖</h1>
+      <Notification message={showNotification.message} type={showNotification.type} />
+
       <Filter search={search} handleInput={handleSearchInput} />
 
       <h1>Add New Contact ➕</h1>
@@ -117,7 +128,6 @@ function App() {
       />
 
       <h1>Contacts 👥</h1>
-      <Notification message={showNotification.message} type={showNotification.type} />
       <Contacts contacts={contactsToShow} handleDelete={handleDeleteContact} />
     </div>
   )

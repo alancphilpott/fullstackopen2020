@@ -5,10 +5,10 @@ const Notification = ({ message, type }) => {
     case 'added' || 'success':
       notificationColor = 'green'
       break
-    case 'updated':
+    case 'updated' || 'warning':
       notificationColor = 'orange'
       break
-    case 'deleted':
+    case 'deleted' || 'error':
       notificationColor = 'red'
       break
     default:

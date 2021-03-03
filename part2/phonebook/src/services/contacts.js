@@ -19,7 +19,10 @@ const update = (id, updatedContact) => {
 
 const deleteOne = (id) => {
   const req = axios.delete(`${baseURL}/${id}`)
-  return req.then((res) => res)
+  return req.then((res) => {
+    console.log(res)
+    return res
+  })
 }
 
 const contactService = { getAll, create, update, deleteOne }
