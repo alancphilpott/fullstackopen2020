@@ -8,7 +8,7 @@ A SPA used to create, update, delete, display and filter through contacts.
 
 ## Implementation
 
-The root _App_ component manages the entire application state - of which there are 4 pieces of state:
+The root _App_ component manages the entire application state - of which there are 5 pieces of state:
 
 - _contacts_: an array containing contact objects with 3 properties, _name_, _number_ & _id_. Initial contacts are fetched from _json-server_ using the imported _contactService getAll_ method during initial render through a _useEffect_ hook.
 
@@ -17,6 +17,8 @@ The root _App_ component manages the entire application state - of which there a
 - _newNumber_: used to control the form input element for new number.
 
 - _search_: controls the form input element for a search query.
+
+- _showNotification_: used to control displaying of notifications based on user actions.
 
 The form event handler _handleNewContact_ will initialize a new contact object and check if the _name_ property (case insensitive) already exists in the phonebook using the Array _filter_ method. If a contact already exists, an alert is shown giving the user an option to update the contacts number, upon confirmation the _contactService update_ method is called. Alternatively, the _contacts_ state is updated and the _newName_ and _newNumber_ states reset. (This is by far the most complex and convoluted part of the code)
 
@@ -81,7 +83,7 @@ Finally before rendering, a conditional operator is ran to assess the current _s
 
 When rendering contacts, each _Contact_ component is passed a _handleDeleteContact_ function to give as an event handler for its delete button - the event handler is unique to each contact respective of its _id_ value. _handleDeleteContact_ first runs the _window.confirm_ method informing the user of its actions, upon confirmation will utilize the _contactService deleteOne_ method to remove the contact from the server.
 
-When dealing with creating, updating, deleting contacts as well as rejected promises from the server, a relevant message is rendered to the UI for 2 seconds. This message is shown using the _Notification_ component which takes the _message_ and _type_ as props. Depending on the value of _type_ the relevant styling is applied. Relevant notifications are given based on user actions such as creating, updating or deleting a contact. A notification is also displayed within the _catch_ function if a returned server side promise is in the _rejected_ state - which can occur if a users client is not in sync with the server.
+When dealing with creating, updating, deleting contacts as well as rejected promises from the server, a relevant message is rendered to the UI for 2 seconds. This message is shown using the _Notification_ component which takes the _message_ and _type_ as props. Depending on the value of _type_ the relevant styling is applied. Notifications are controlled using the _showNotification_ state variable. Relevant notifications are given based on user actions such as creating, updating or deleting a contact. A notification is also displayed within the _catch_ function if a returned server side promise is in the _rejected_ state - which can occur if a users client is not in sync with the server.
 
 ## Component Tree
 
