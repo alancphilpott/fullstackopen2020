@@ -2,13 +2,16 @@ const Notification = ({ message, type }) => {
   let notificationColor = ''
 
   switch (type) {
-    case 'added' || 'success':
+    case 'added':
+    case 'success':
       notificationColor = 'green'
       break
-    case 'updated' || 'warning':
+    case 'updated':
+    case 'warning':
       notificationColor = 'orange'
       break
-    case 'deleted' || 'error':
+    case 'deleted':
+    case 'error':
       notificationColor = 'red'
       break
     default:
