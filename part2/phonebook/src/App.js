@@ -17,7 +17,11 @@ function App() {
     contactService
       .getAll()
       .then((contacts) => setContacts(contacts))
-      .catch((err) => console.log(`Error Occured: ${err}`))
+      .catch((err) => {
+        setShowNotification({ message: `Error Loading Contacts`, type: 'error' })
+
+        setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
+      })
   }, [])
 
   // Helper Functions
@@ -74,7 +78,11 @@ function App() {
           setNewName('')
           setNewNumber('')
         })
-        .catch((err) => console.log(`Error Occured: ${err}`))
+        .catch((err) => {
+          setShowNotification({ message: `Error Adding Contact`, type: 'error' })
+
+          setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
+        })
     }
   }
 
