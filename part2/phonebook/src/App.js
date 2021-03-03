@@ -3,12 +3,14 @@ import Contacts from './components/Contacts'
 import Filter from './components/Filter'
 import ContactForm from './components/ContactForm'
 import contactService from './services/contacts'
+import Notification from './components/Notification'
 
 function App() {
   const [contacts, setContacts] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+  const [showNotification, setShowNotification] = useState({ message: null, type: null })
 
   // Effects
   useEffect(() => {
@@ -51,6 +53,11 @@ function App() {
         contactService.update(existingContact.id, updatedContact).then((contact) => {
           setContacts(contacts.map((c) => (c.id !== updatedContact.id ? c : contact)))
         })
+
+        setShowNotification({ message: `Updated ${updatedContact.name}`, type: 'updated' })
+
+        setTimeout(() => setShowNotification({ message: null, type: null }), 5000)
+
         setNewName('')
         setNewNumber('')
       }
@@ -59,6 +66,11 @@ function App() {
         .create(newContact)
         .then((contact) => {
           setContacts(contacts.concat(contact))
+
+          setShowNotification({ message: `Added ${contact.name}`, type: 'added' })
+
+          setTimeout(() => setShowNotification({ message: null, type: null }), 5000)
+
           setNewName('')
           setNewNumber('')
         })
@@ -76,6 +88,10 @@ function App() {
         .deleteOne(id)
         .then((res) => {
           setContacts(contacts.filter((c) => c.id !== id))
+
+          setShowNotification({ message: `Deleted Contact`, type: 'deleted' })
+
+          setTimeout(() => setShowNotification({ message: null, type: null }), 5000)
         })
         .catch((err) => console.log(`Error Occured: ${err}`))
     }
@@ -101,6 +117,7 @@ function App() {
       />
 
       <h1>Contacts 👥</h1>
+      <Notification message={showNotification.message} type={showNotification.type} />
       <Contacts contacts={contactsToShow} handleDelete={handleDeleteContact} />
     </div>
   )

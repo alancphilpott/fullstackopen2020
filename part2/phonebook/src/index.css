@@ -76,3 +76,8 @@ button.deleteBtn:hover {
   background-color: #af4f4c; /* Green */
   color: white;
 }
+
+.notification {
+  width: 75%;
+  margin: 0 auto;
+}
