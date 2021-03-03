@@ -2,7 +2,7 @@
 
 The exercise for this project can be found [here](https://fullstackopen.com/en/part2/forms#exercises-2-6-2-10)
 
-![Phonebook Screenshot](https://i.imgur.com/92cIWh7.gif)
+![Phonebook Screenshot](https://i.imgur.com/ZP6VZEa.gif)
 
 A SPA used to create, update, delete, display and filter through contacts.
 
@@ -28,12 +28,12 @@ The form event handler _handleNewContact_ will initialize a new contact object a
             number: newNumber
         }
 
-        const existing = checkAlreadyExists(newContact)
+        const existing = checkExists(newContact)
         if (existing.length !== 0) {
             const existingContact = existing[0]
 
             const shouldUpdate = window.confirm(
-            `${existingContact.name} Already Exists - Update Their Phone Number?`
+                `${existingContact.name} Already Exists - Update Their Phone Number?`
             )
 
             const updatedContact = { ...existingContact, number: newContact.number }
@@ -42,6 +42,11 @@ The form event handler _handleNewContact_ will initialize a new contact object a
                 contactService.update(existingContact.id, updatedContact).then((contact) => {
                     setContacts(contacts.map((c) => (c.id !== updatedContact.id ? c : contact)))
                 })
+
+                setShowNotification({ message: `Updated ${updatedContact.name}`, type: 'updated' })
+
+                setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
+
                 setNewName('')
                 setNewNumber('')
             }
@@ -49,15 +54,25 @@ The form event handler _handleNewContact_ will initialize a new contact object a
             contactService
                 .create(newContact)
                 .then((contact) => {
-                setContacts(contacts.concat(contact))
-                setNewName('')
-                setNewNumber('')
+                    setContacts(contacts.concat(contact))
+
+                    setShowNotification({ message: `Added ${contact.name}`, type: 'added' })
+
+                    setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
+
+                    setNewName('')
+                    setNewNumber('')
                 })
-                .catch((err) => console.log(`Error Occured: ${err}`))
+                .catch((err) => {
+                    setShowNotification({ message: `Error Adding Contact`, type: 'error' })
+
+                    setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
+                })
         }
+
     }
 
-Finally before rendering, a conditional operator is ran to assess the current _search_ state - if empty all contacts are displayed - otherwise only include the contacts that match the search query.
+Finally before rendering, a conditional operator is ran to assess the current _search_ state - if empty, all contacts are displayed - otherwise only include the contacts that match the search query.
 
     const contactsToShow =
         search === ''
@@ -65,6 +80,8 @@ Finally before rendering, a conditional operator is ran to assess the current _s
         : contacts.filter((p) => p.name.toLocaleLowerCase().includes(search.toLowerCase()))
 
 When rendering contacts, each _Contact_ component is passed a _handleDeleteContact_ function to give as an event handler for its delete button - the event handler is unique to each contact respective of its _id_ value. _handleDeleteContact_ first runs the _window.confirm_ method informing the user of its actions, upon confirmation will utilize the _contactService deleteOne_ method to remove the contact from the server.
+
+When dealing with creating, updating, deleting contacts as well as rejected promises from the server, a relevant message is rendered to the UI for 2 seconds. This message is shown using the _Notification_ component which takes the _message_ and _type_ as props. Depending on the value of _type_ the relevant styling is applied. Relevant notifications are given based on user actions such as creating, updating or deleting a contact. A notification is also displayed within the _catch_ function if a returned server side promise is in the _rejected_ state - which can occur if a users client is not in sync with the server.
 
 ## Component Tree
 
