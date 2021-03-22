@@ -48,22 +48,31 @@ function App() {
       const existingContact = existing[0]
 
       const shouldUpdate = window.confirm(
-        `${existingContact.name} Already Exists - Update Their Phone Number?`
+        `"${existingContact.name}" Already Exists - Update Their Phone Number?`
       )
 
       const updatedContact = { ...existingContact, number: newContact.number }
 
       if (shouldUpdate) {
-        contactService.update(existingContact.id, updatedContact).then((contact) => {
-          setContacts(contacts.map((c) => (c.id !== updatedContact.id ? c : contact)))
-        })
+        contactService
+          .update(existingContact.id, updatedContact)
+          .then((contact) => {
+            setContacts(contacts.map((c) => (c.id !== updatedContact.id ? c : contact)))
 
-        setShowNotification({ message: `Updated ${updatedContact.name}`, type: 'updated' })
+            setShowNotification({ message: `Updated ${updatedContact.name}`, type: 'updated' })
 
-        setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
+            setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
 
-        setNewName('')
-        setNewNumber('')
+            setNewName('')
+            setNewNumber('')
+          })
+          .catch((err) => {
+            const errorMsg = err.response.data.error
+
+            setShowNotification({ message: `${errorMsg}`, type: 'error' })
+
+            setTimeout(() => setShowNotification({ message: null, type: null }), 4000)
+          })
       }
     } else {
       contactService
@@ -79,9 +88,11 @@ function App() {
           setNewNumber('')
         })
         .catch((err) => {
-          setShowNotification({ message: `Error Adding Contact`, type: 'error' })
+          const errorMsg = err.response.data.error
 
-          setTimeout(() => setShowNotification({ message: null, type: null }), 2000)
+          setShowNotification({ message: `${errorMsg}`, type: 'error' })
+
+          setTimeout(() => setShowNotification({ message: null, type: null }), 4000)
         })
     }
   }
