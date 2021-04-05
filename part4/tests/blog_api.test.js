@@ -15,24 +15,49 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-test('there are two blogs', async () => {
-  const res = await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+describe('HTTP GET', () => {
+  test('there are two blogs', async () => {
+    const res = await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
 
-  expect(res.body).toHaveLength(helper.initialBlogs.length)
+    expect(res.body).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('blog posts unique field is named id', async () => {
+    const res = await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const blogs = res.body
+
+    expect(blogs[0].id).toBeDefined()
+  })
 })
 
-test('blog posts unique field is named id', async () => {
-  const res = await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+describe('HTTP POST', () => {
+  test('a valid blog can be added', async () => {
+    const newBlog = {
+      title: 'Blog From Test',
+      author: 'Aldo McBean',
+      url: 'http://example.com',
+      likes: 400
+    }
 
-  const blogs = res.body
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
 
-  expect(blogs[0].id).toBeDefined()
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+    const blogTitles = blogsAtEnd.map((b) => b.title)
+    expect(blogTitles).toContain('Blog From Test')
+  })
 })
 
 afterAll(() => mongoose.connection.close())
