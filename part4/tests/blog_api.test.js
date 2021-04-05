@@ -24,4 +24,15 @@ test('there are two blogs', async () => {
   expect(res.body).toHaveLength(helper.initialBlogs.length)
 })
 
+test('blog posts unique field is named id', async () => {
+  const res = await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const blogs = res.body
+
+  expect(blogs[0].id).toBeDefined()
+})
+
 afterAll(() => mongoose.connection.close())
