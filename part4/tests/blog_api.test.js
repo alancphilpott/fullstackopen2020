@@ -58,6 +58,22 @@ describe('HTTP POST', () => {
     const blogTitles = blogsAtEnd.map((b) => b.title)
     expect(blogTitles).toContain('Blog From Test')
   })
+
+  test('providing no likes property defaults the value to 0', async () => {
+    const newBlog = {
+      title: 'Blog From Test',
+      author: 'Aldo McBean',
+      url: 'http://example.com'
+    }
+
+    const res = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    expect(res.body.likes).toEqual(0)
+  })
 })
 
 afterAll(() => mongoose.connection.close())
