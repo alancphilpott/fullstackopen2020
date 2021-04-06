@@ -100,4 +100,18 @@ describe('HTTP DELETE', () => {
   })
 })
 
+describe('HTTP PUT', () => {
+  test('should update the number of likes on blog', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send({ likes: 99 })
+
+    const updatedBlog = await Blog.find({ likes: 99 })
+
+    expect(updatedBlog).not.toBeNull()
+    expect(updatedBlog[0].likes).toEqual(99)
+  })
+})
+
 afterAll(() => mongoose.connection.close())
